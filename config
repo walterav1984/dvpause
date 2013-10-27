@@ -1,0 +1,25 @@
+Format of the config File:
+First, a line containing __BASEDIR only must be given.
+The line directly after that one contains the directory that all files are in.
+You can use __CWD__ as a wildcard for the current working directory at the beginning
+of the line.
+Every movie entry starts with a line containing __MOVIE. The first line afterwards contains the
+name of the movie, the second line the filename of the movie in the folder provided at basedir.
+Any other lines will be ignored, just like this text up here.
+
+
+
+__BASEDIR
+__CWD__/videos/
+
+You can also use absolute directories:
+/home/username/Videos/dvswitch_videos/
+
+
+__MOVIE
+Big Buck Bunny (Excerpt)
+bigbuckbunny.dv
+
+__MOVIE
+Sintel (Excerpt)
+sintel.dv
