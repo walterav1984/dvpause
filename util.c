@@ -78,11 +78,6 @@ char readmovies()
 			assert(getl(stream, basedir_string));
 			if (!strstr(basedir, "__CWD__"))
 			{
-				strcpy(basedir, getcwd(NULL, 0));
-				strcat(basedir, basedir_string+7);
-			}
-			else
-			{
 				strcpy(basedir, basedir_string);
 			}
 		}
