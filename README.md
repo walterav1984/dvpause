@@ -15,9 +15,27 @@ to
 GTK+ (Tested with GTK 3.10, propably 3.6+ supported)
 dvsource-file (for make run)
 
-## Installation:
-Compile it with `make` and you're done!
-You can start the program with `./main`. I recommend to edit the Makefile to use `make run` if you're doing development. `make run` will compile DVPause + start piping output to dvsource-file, however, you must change dvsource's port + host.
+## Compile and Run on ubuntu 16.04:
+```
+sudo apt-get install libgtk-3-dev libcairo2-dev #ontop of packages to compile dvswitch!!!
+
+cd mygitprojects
+git clone https://github.com/walterav1984/dvpause
+cd dvpause
+
+make
+
+./main | dvsource-file - -p 1234 -h 127.0.0.1
+#only works if dvswitch sub process 'dvsource-file' with "stdin option" was installed see dvswitch!
+
+chmod +x dvpause-full-playlist.sh
+./dvpause-full-playlist.sh #edit this file for playlist item / dvswitch location!
+```
 
 ## Configuration:
-The configuration is in the "config" file, this is what all the movies must be added to. Two sample scenes are provided.
+The configuration has moved to `dvpause-full-playlist.sh` edit and set location for dvswitch and folder which contains dv files.
+
+##TODO
+-[ ] Two sample scenes are provided, but judder so need to reencode original with speedup/pitch fix (24p>25i)
+-[ ] Fix arrow key input for skipping/searching in frame steps, forward and backward steps while seeking the start of the clip.
+-[ ] CPU usage is very high...
