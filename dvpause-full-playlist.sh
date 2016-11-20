@@ -10,6 +10,7 @@ dvp_videos=~/mygitprojects/dvpause/videos/
 
 #set dvswitch connection parameters
 dvp_dvswitch='-p 1234 -h 127.0.0.1'
+#dvp_dvswitch='' #leave empty if using MIXER_HOST MIXER_PORT from config file ".dvswitchrc"
 
 #fill playlist file with location data
 echo "__BASEDIR" > $dvp_src/config
