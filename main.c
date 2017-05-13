@@ -1,4 +1,5 @@
 #include <gtk/gtk.h>
+#include <libsoup/soup.h>
 #include <assert.h>
 #include <time.h>
 #include <inttypes.h>
@@ -13,14 +14,12 @@
 // Globals
 struct _DVControl DVControl;
 
-
 // Widgets
 GtkWidget *framelabel;
 GtkWidget *playbutton;
 GtkWidget *frameentry;
 GtkWidget *playbuttonimage;
 GObject   *frameadjustment;
-
 
 /* Signal handlers */
 void destroy (GtkWidget *widget, gpointer data)
@@ -178,6 +177,49 @@ static GtkWidget *create_window (void)
 	return window;
 }
 
+static void get_countdown(SoupServer *server, SoupMessage *msg, const char *path, GHashTable *query, SoupClientContext *client, gpointer user_data)
+{
+	if (msg->method != SOUP_METHOD_GET)
+	{
+		soup_message_set_status (msg, SOUP_STATUS_NOT_IMPLEMENTED);
+		return;
+	}
+
+
+	soup_message_set_status(msg, SOUP_STATUS_OK);
+	
+	char seconds_remaining[50];
+	sprintf(seconds_remaining, "%.1f", (float)(DVControl.totalframes - DVControl.currentframe) / FPS);
+	soup_message_set_response(msg, "text/html", SOUP_MEMORY_COPY, seconds_remaining, strlen(seconds_remaining));
+}
+
+static void get_start_playback(SoupServer *server, SoupMessage *msg, const char *path, GHashTable *query, SoupClientContext *client, gpointer user_data)
+{
+	if (msg->method != SOUP_METHOD_GET)
+	{
+		soup_message_set_status (msg, SOUP_STATUS_NOT_IMPLEMENTED);
+		return;
+	}
+
+
+	soup_message_set_status(msg, SOUP_STATUS_OK);
+	playerstate = PLAYER_STATE_CONTINUE;
+	gtk_image_set_from_icon_name (GTK_IMAGE(playbuttonimage), "media-playback-pause", GTK_ICON_SIZE_DIALOG);
+	soup_message_set_response(msg, "text/html", SOUP_MEMORY_COPY, "ok", 3);
+}
+
+void init_httpsrv()
+{
+	SoupServer *ssrv;
+
+	ssrv = soup_server_new(SOUP_SERVER_SERVER_HEADER, "dvpause", NULL);
+	GError *error = NULL;
+	soup_server_listen_all(ssrv, 8080, 0, &error);
+
+	soup_server_add_handler(ssrv, "/countdown", get_countdown, NULL, NULL);
+	soup_server_add_handler(ssrv, "/play", get_start_playback, NULL, NULL);
+}
+
 int main (int argc, char *argv[])
 {
 	// Read config
@@ -197,7 +239,10 @@ int main (int argc, char *argv[])
 	init_dvsystem();
 	g_timeout_add(1000/25, update_framedisp, NULL);
 
-	gtk_main ();
+	// Start HTTP server
+	init_httpsrv();
+
+	gtk_main();
 
 	exit(EXIT_SUCCESS);
 }
