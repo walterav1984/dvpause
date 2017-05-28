@@ -28,3 +28,4 @@ n; n; b loop' >> $dvp_src/config
 
 #runs dvpause
 $dvp_src/main | dvsource-file - $dvp_dvswitch
+#$dvp_src/main | tee >(dvsource-file -) >(ffplay -) > /dev/null #playback audio&video to share with presenter and guests in studio 
