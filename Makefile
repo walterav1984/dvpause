@@ -1,6 +1,6 @@
 CC     = gcc
-CFLAGS = `pkg-config --cflags gtk+-3.0`
-LIBS   = `pkg-config --libs gtk+-3.0`
+CFLAGS = `pkg-config --cflags gtk+-3.0 libsoup-2.4`
+LIBS   = `pkg-config --libs gtk+-3.0 libsoup-2.4`
 FILES  = main.c util.c dv.c
 
 build: $(FILES)
