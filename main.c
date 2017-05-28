@@ -36,14 +36,14 @@ int update_framedisp()
 
 	// Label
 	char labeltext[100];
-	strcpy(labeltext, long2string(DVControl.currentframe));
+	strcpy(labeltext, long2string(DVControl.currentframe + 1));
 	strcat(labeltext, " / ");
 	strcat(labeltext, long2string(DVControl.totalframes));
 	gtk_label_set_text(GTK_LABEL(framelabel), labeltext);
 
 	// Slider
 	if (DVControl.totalframes != 0 && playerstate != PLAYER_STATE_NEWPOS_PERCENT)
-		DVControl.pos_percent = DVControl.currentframe * 100. / DVControl.totalframes;
+		DVControl.pos_percent = DVControl.currentframe * 100. / (DVControl.totalframes - 1);
 
 	gtk_adjustment_set_value(GTK_ADJUSTMENT(frameadjustment), DVControl.pos_percent);
 
@@ -112,7 +112,7 @@ void setframe_activated(GtkWidget *widget)
 	long frame = string2long(frametext);
 	if (frame < 0) frame = 0;
 
-	DVControl.newpos = frame*BYTES_PER_FRAME;
+	DVControl.newpos = (frame - 1)*BYTES_PER_FRAME;
 	playerstate = PLAYER_STATE_NEWPOS;
 }
 
