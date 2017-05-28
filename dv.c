@@ -93,7 +93,7 @@ void *putdv(void *asdf)
 			break;
 		}
 
-		if (DVControl.currentframe >= DVControl.totalframes
+		if (DVControl.currentframe >= (DVControl.totalframes -1)
 		&& playerstate == PLAYER_STATE_CONTINUE)
 			playerstate = PLAYER_STATE_PAUSE;
 	}
@@ -110,7 +110,7 @@ void *putdv(void *asdf)
 */
 long get_total_frames(long long filesize)
 {
-	return filesize / (80 * 150 * SEQUENCES) - 1;
+	return filesize / (80 * 150 * SEQUENCES);
 }
 
 
